@@ -25,7 +25,32 @@ const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology:
 
 client.connect(err => {
   const serviceCollection = client.db("fixmypc").collection("services");
+  const feedbackCollection = client.db("fixmypc").collection("feedbacks");
 
 
+  app.post('/addService', (req, res) => {
+    const newService = req.body;
+    serviceCollection.insertOne(newService)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
+  app.get('/service', (req, res) => {
+    serviceCollection.find()
+      .toArray((err, services) => {
+        res.send(services);
+      })
+  })
+
+
+  app.post('/addFeedback', (req, res) => {
+    const newFeedback = req.body;
+    feedbackCollection.insertOne(newFeedback)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
 
 });
