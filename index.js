@@ -82,12 +82,21 @@ client.connect(err => {
   })
 
 
-  app.get('/admin', (req, res) => {
-    adminCollection.find()
-      .toArray((err, admins) => {
-        res.send(admins);
-      })
-  })
+  // app.get('/admin', (req, res) => {
+  //   adminCollection.find()
+  //     .toArray((err, admins) => {
+  //       res.send(admins);
+  //     })
+  // })
+
+
+  app.post('/checkAdmin', (req, res) => {
+    const email = req.body.email;
+    adminCollection.find({ email: email })
+        .toArray((err, admins) => {
+            res.send(admins.length > 0);
+        })
+})
 
 
   app.post('/addOrder', (req, res) => {
