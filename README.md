@@ -1,6 +1,5 @@
-      "PC-Bazar.com"
+      "FixMyPC.com"
       
-==> Live : https://pacific-wildwood-47239.herokuapp.com
+==> Live : https://morning-brushlands-06822.herokuapp.com
 
-==> This is the server code of "PC-Bazar.com".
-# complete-website-server-Jahid101
+==> This is the server code of "FixMyPC.com".
