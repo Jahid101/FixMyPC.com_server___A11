@@ -39,6 +39,15 @@ client.connect(err => {
   })
 
 
+  app.post('/updatedOrder', (req, res) => {
+    const updatedOrder = req.body;
+    updatedOrderCollection.insertOne(updatedOrder)
+      .then(result => {
+        res.send(result.insertedCount > 0)
+      })
+  })
+
+
   app.get('/service', (req, res) => {
     serviceCollection.find()
       .toArray((err, services) => {
@@ -50,10 +59,22 @@ client.connect(err => {
   app.get('/serviceBooking/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     serviceCollection.find({ _id: id })
-      .toArray((err, products) => {
-        res.send(products[0]);
+      .toArray((err, services) => {
+        res.send(services[0]);
       })
   })
+
+
+  app.patch('/updateOrderList/:id', (req, res) => {
+    const id = ObjectID(req.params.id)
+        orderCollection.updateOne({ _id: id },
+            {
+                $set: { status: req.body.status }
+            })
+            .then(result => {
+                res.send(result.modifiedCount > 0 )
+            })
+    })
 
 
   app.post('/addFeedback', (req, res) => {
@@ -82,13 +103,6 @@ client.connect(err => {
   })
 
 
-  // app.get('/admin', (req, res) => {
-  //   adminCollection.find()
-  //     .toArray((err, admins) => {
-  //       res.send(admins);
-  //     })
-  // })
-
 
   app.post('/checkAdmin', (req, res) => {
     const email = req.body.email;
@@ -97,6 +111,7 @@ client.connect(err => {
             res.send(admins.length > 0);
         })
 })
+
 
 
   app.post('/addOrder', (req, res) => {
@@ -108,11 +123,28 @@ client.connect(err => {
   })
 
 
+
   app.delete('/deleteService/:id', (req, res) => {
     const id = ObjectID(req.params.id)
     serviceCollection.deleteOne({ _id: id })
       .then(result => {
         res.send(result.deletedCount > 0)
+      })
+  })
+
+
+app.get('/serviceList', (req, res) => {
+    orderCollection.find({ email: req.query.email })
+      .toArray((err, orders) => {
+        res.send(orders);
+      })
+  })
+
+
+app.get('/orderList', (req, res) => {
+    orderCollection.find()
+      .toArray((err, orders) => {
+        res.send(orders);
       })
   })
 
